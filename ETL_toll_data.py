@@ -57,16 +57,10 @@ consolidate_data = BashOperator(
     dag=dag,
 )
 
-#transform data
-transform_data = BashOperator( 
-    task_id='transform_data',
-    bash_command='cut -d "," -f4 /home/project/airflow/dags/finalassignment/extracted_data.csv  | tr "[:lower:]" "[:upper:]" > /home/project/airflow/dags/finalassignment/staging/transformed_data.csv',
-    dag=dag,
-)
 
 #define pipeline
 unzip_data >> extract_data_from_csv 
 extract_data_from_csv >> extract_data_from_tsv 
 extract_data_from_tsv >> extract_data_from_fixed_width
 extract_data_from_fixed_width >> consolidate_data 
-consolidate_data >> transform_data
+consolidate_data
